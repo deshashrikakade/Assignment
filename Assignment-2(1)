@@ -10,10 +10,10 @@ echo "The OS is $NAME"
 exitCode=$?
 if [ $exitCode != 0 ]
 then
-echo "************Failed to install minikube*****************"
+echo "****Failed to install minikube****"
 exit 1
 else
-echo "************Successfully installed minikube*************"
+echo "****Successfully installed minikube****"
 fi
 fi
 if [[ "$NAME" == *"macOS"* ]]
@@ -22,7 +22,7 @@ echo "The OS is $NAME"
 exitCode=$?
 if [ $exitCode != 0 ]
 then
-echo "*********Failed to install minikube**********"
+echo "****Failed to install minikube****"
 exit 1
 else
 echo "****Successfully installed minikube****"
@@ -34,7 +34,7 @@ echo "The OS is $NAME"
 exitCode=$?
 if [ $exitCode != 0 ]
 then
-echo "*********Failed to install minikube***************"
+echo "****Failed to install minikube****"
 exit 1
 else
 echo "****Successfully installed minikube****"
@@ -43,6 +43,3 @@ fi
 else
 echo "Not able to detect Operating System."
 fi
-
-has context menu
-Compose
