@@ -1,45 +1,66 @@
 #!/usr/bin/bash
-if [ -f "/etc/os-release" ]
-then
-source "/etc/os-release"
-echo "Operating System: $NAME"
-echo "Version: $VERSION"
-if [[ "$NAME" == *"Linux"* ]]
-then
-echo "The OS is $NAME"
-exitCode=$?
-if [ $exitCode != 0 ]
-then
-echo "****Failed to install minikube****"
-exit 1
+while getopts "a:b:c:" opt; do
+  case $opt in
+    a)
+      platform="$OPTARG"
+      ;;
+    c)
+      feature="$OPTARG"
+      ;;
+    b)
+      version="$OPTARG"
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [ -z "$platform" ] || [ -z "$feature" ] ; then
+  echo "Usage: $0 -a <platform> -c <feature>"
+  exit 1
+fi
+case $platform in
+  "minikube")
+    case $feature in
+      "install")
+        OS=$(uname -s)
+        case "$OS" in
+    "Darwin")
+        MINIKUBE_BINARY="minikube-darwin-amd64"
+        ;;
+    "Linux")
+        MINIKUBE_BINARY="minikube-linux-amd64"                                                                                                                                                                                              MINIKUBE_BINARY="minikube-linux-amd64"
+        ;;
+    "Windows_NT")
+        MINIKUBE_BINARY="minikube-windows-amd64.exe"
+        ;;
+    *)
+        ;;
+        esac
+        MINIKUBE_URL="https://storage.googleapis.com/minikube/releases/latest/$MINIKUBE_BINARY"
+        curl -Lo minikube "$MINIKUBE_URL"
+        echo "***Minikube Installed Successfully***"
+        ;;
+        *)
+        echo "Feature Invalid: $feature for platform: $platform"
+        exit 1
+        ;;
+    esac
+    ;;
+  *)
+    echo "platform_invalid: $platform"
+    exit 1
+    ;;
+esac
+
+if command -v minikube &>/dev/null; then
+  echo "Minikube installed"
 else
-echo "****Successfully installed minikube****"
-fi
-fi
-if [[ "$NAME" == *"macOS"* ]]
-then
-echo "The OS is $NAME"
-exitCode=$?
-if [ $exitCode != 0 ]
-then
-echo "****Failed to install minikube****"
-exit 1
-else
-echo "****Successfully installed minikube****"
-fi
-fi
-if [[ "$NAME" == *"Windows"* ]]
-then
-echo "The OS is $NAME"
-exitCode=$?
-if [ $exitCode != 0 ]
-then
-echo "****Failed to install minikube****"
-exit 1
-else
-echo "****Successfully installed minikube****"
-fi
-fi
-else
-echo "Not able to detect Operating System."
-fi
+  echo "Minikube not installed"
+fi       
